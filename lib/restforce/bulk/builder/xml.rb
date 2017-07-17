@@ -8,12 +8,13 @@ module Restforce
           self.operation = operation
         end
 
-        def job(object_name, content_type, external_id_field=nil)
+        def job(object_name, concurrency, content_type, external_id_field=nil)
           build_xml(:jobInfo) do |xml|
             xml.operation operation
             xml.object object_name
             xml.externalIdFieldName external_id_field if external_id_field
             xml.contentType content_type
+            xml.concurrencyMode concurrency
           end
         end
 
