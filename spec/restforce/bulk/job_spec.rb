@@ -3,6 +3,7 @@ require "spec_helper"
 describe Restforce::Bulk::Job, mock_restforce: true do
   let(:object_name) { 'Account' }
   let(:external_id_field) { 'Name' }
+  let(:options) { {} }
 
   let(:raw_response_body) { '' }
 
@@ -21,6 +22,7 @@ describe Restforce::Bulk::Job, mock_restforce: true do
         xml.operation operation
         xml.object object_name
         xml.contentType operation_content_type
+        options.map { |k, v| xml.send(k, v) }
       end
     end
 
@@ -28,8 +30,8 @@ describe Restforce::Bulk::Job, mock_restforce: true do
       build_bulk_xml(:jobInfo) do |xml|
         xml.operation operation
         xml.object object_name
-        xml.externalIdFieldName external_id_field
         xml.contentType operation_content_type
+        options.map { |k, v| xml.send(k, v) }
       end
     end
 
@@ -91,11 +93,13 @@ describe Restforce::Bulk::Job, mock_restforce: true do
 
     context "with external_id" do
       let(:operation) { 'upsert' }
+      let(:options) { { externalIdFieldName: external_id_field } }
+
 
       it "adds an external id to xml if there is an external_id" do
         expect_restforce_request(:post, "job", xml_upsert).and_return(restforce_response)
 
-        job = Restforce::Bulk::Job.create(operation, object_name, :xml, 'Name')
+        job = Restforce::Bulk::Job.create(operation, object_name, :xml, options)
       end
     end
   end
@@ -454,7 +458,7 @@ describe Restforce::Bulk::Job, mock_restforce: true do
     end
 
     let(:raw_response_body) do
-      build_bulk_xml(:jobInfo) do |xml|
+      build_bulk_xml(:jobInfo, options) do |xml|
         xml.id             job.id
         xml.operation      'upsert'
         xml.object         'Lead'

@@ -7,6 +7,7 @@ require "faraday_middleware/response_middleware"
 require "restforce"
 require "restforce/bulk/version"
 require "active_support/inflector"
+require "active_support/core_ext/hash"
 require "zip"
 
 module Restforce

@@ -11,14 +11,10 @@ module Restforce
       }
 
       class << self
-        def create(operation, object_name, concurrency=:Parallel, content_type=:xml, , external_id_field=nil)
-          builder  = Restforce::Bulk::Builder::Xml.new(operation)
+        def create(operation, object_name, content_type=:xml, options={})
+          builder  = Restforce::Bulk::Builder::Xml.new(operation, options)
           data     = builder.job(object_name,
-                                 concurrency.capitalize,
-                                 JOB_CONTENT_TYPE_MAPPING[content_type.to_sym],
-                                  external_id_field)
-
-          data     = builder.job(object_name, JOB_CONTENT_TYPE_MAPPING[content_type.to_sym], external_id_field)
+                                 JOB_CONTENT_TYPE_MAPPING[content_type.to_sym])
 
           response = Restforce::Bulk.client.perform_request(:post, 'job', data)
 
@@ -33,7 +29,10 @@ module Restforce
       end
 
       attr_accessor :id, :operation, :object, :created_by_id, :created_date,
-                    :system_modstamp, :state, :content_type
+                    :system_modstamp, :state, :content_type,
+                    :number_records_failed, :number_batches_in_progress,
+                    :number_batches_completed, :number_batches_failed,
+                    :number_batches_total
 
       def initialize(attributes={})
         assign_attributes(attributes)

@@ -2,19 +2,22 @@ module Restforce
   module Bulk
     module Builder
       class Xml
-        attr_accessor :operation
+        attr_accessor :operation, :options
 
-        def initialize(operation)
+        def initialize(operation, options={})
           self.operation = operation
+          @options = options
         end
 
-        def job(object_name, concurrency, content_type, external_id_field=nil)
+        def job(object_name, content_type)
           build_xml(:jobInfo) do |xml|
             xml.operation operation
             xml.object object_name
-            xml.externalIdFieldName external_id_field if external_id_field
             xml.contentType content_type
-            xml.concurrencyMode concurrency
+
+            options.each do |option, value|
+              xml.send(option, value)
+            end
           end
         end
 

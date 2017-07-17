@@ -19,7 +19,9 @@ describe Restforce::Bulk::Client do
   end
 
   context "when a client is given" do
-    let(:restforce_client) { Restforce.new(instance_url: 'test.salesforce.com') }
+    let(:restforce_client) do
+      Restforce.new(instance_url: 'https://test.salesforce.com')
+    end
 
     it "uses it instead" do
       allow(restforce_client).to receive(:authenticate!)
