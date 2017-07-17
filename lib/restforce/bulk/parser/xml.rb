@@ -3,7 +3,7 @@ module Restforce
     module Parser
       class Xml
         def batches(data)
-          parsed_data = Restforce::Mash.new(::MultiXml.parse(data))
+          parsed_data = Restforce::Mash.new(JSON.parse(data.to_json))
 
           wrap_in_array(parsed_data.batchInfoList.batchInfo)
         end
