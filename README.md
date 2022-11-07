@@ -1,4 +1,8 @@
-# Restforce::Bulk
+# Notes about the Braincheck fork
+- 2022-07-02 Attempt to make work for upgrade to Rails 6.0
+
+
+# Restforce::Bulk (Original Readme)
 
 [![build status][1]][2]
 
